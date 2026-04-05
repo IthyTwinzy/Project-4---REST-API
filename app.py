@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 @app.route('/')
+#TEST
 def index():
     return jsonify({'message': 'hello flask'})
 
