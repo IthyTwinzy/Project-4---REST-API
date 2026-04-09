@@ -5,6 +5,12 @@ import requests
 API_KEY: str = current_app.config.get("TMDB_API_KEY")
 TMDB_URL: str = current_app.config.get("TMDB_URL")
 
+@current_app.get('/genres')
+def get_genres():
+    """Returns a list of all genere names and their id numbers"""
+    return requests.get(f"{TMDB_URL}genre/movie/list", params={"api_key" : API_KEY}).json().get("genres")
+
+
 # Expects queries of format: url?genre=28&genre=12
 # Currently returns results in the first page of data from tmdb
 # Returns an empty array if no results found
