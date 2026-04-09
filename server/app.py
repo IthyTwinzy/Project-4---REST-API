@@ -1,24 +1,27 @@
 from flask import Flask
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 import requests
-import os
 
 # Gets API Key to validate requests to TMDB
-load_dotenv()
-API_KEY: str = os.environ.get("TMDB_API_KEY")
-
-# TMDB URLs
+API_KEY: str = dotenv_values().get("TMDB_API_KEY")
 TMDB_URL: str = "https://api.themoviedb.org/3/"
-KEY_PARAM: dict = {"api_key" : API_KEY}
 
-# Checks if a valid api key is provided
+# Validates API Key
 if API_KEY == None:
     raise KeyError("TMDB API Key not provided")
-if requests.get(TMDB_URL + "authentication", params=KEY_PARAM).status_code == 401:
+if requests.get(TMDB_URL + "authentication", params={"api_key" : API_KEY}).status_code == 401:
     raise KeyError("Invalid TMDB API Key")
 
 # Starts the server
 app = Flask(__name__)
+
+# Intializes envornmental variables
+app.config["TMDB_API_KEY"] = API_KEY
+app.config["TMDB_URL"] = TMDB_URL
+
+# Imports routed functions
+with app.app_context():
+    from searchByGenre import search_by_genre
 
 # Test function
 @app.route('/')
