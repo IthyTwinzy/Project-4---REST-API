@@ -25,6 +25,7 @@ with app.app_context():
 
     import searchByTitle
 
+    import searchByPopularity
 # Test function
 @app.route('/')
 #TEST
