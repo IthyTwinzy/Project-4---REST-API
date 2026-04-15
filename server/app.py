@@ -23,6 +23,8 @@ app.config["TMDB_URL"] = TMDB_URL
 with app.app_context():
     import searchByGenre
 
+    import searchByTitle
+
 # Test function
 @app.route('/')
 #TEST
