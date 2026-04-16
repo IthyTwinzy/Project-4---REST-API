@@ -11,4 +11,4 @@ def search_by_release(): # Enter in format: YEAR-MO-DY (EX. 2026-04-13)
     date = requests.args.get("date")
     
     data = requests.get("f{TMDB_URL}discover/movie?api_key={API_KEY}&primary_release_date.lte={date}&primary_release_date.gte={date}")
-    print(data.json["results"])
+    return(data.json["results"])
