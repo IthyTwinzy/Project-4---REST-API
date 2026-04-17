@@ -1,8 +1,8 @@
 import requests
-
+from genres import genres
 
 BACKEND_URL: str = 'http://127.0.0.1:5000/'
-GENRE_URL = f'{BACKEND_URL}searchByGenre'
+GENRE_URL = f'{BACKEND_URL}search_by_genre'
 TITLES_URL = f'{BACKEND_URL}search_by_title'
 RELEASE_URL = f'{BACKEND_URL}search_by_release'
 POPULARITY_URL = f'{BACKEND_URL}search_by_popularity'
@@ -26,27 +26,21 @@ def main():
         match user_response.strip().rstrip('.'):
             case "1":
                 find_by_name()        
-
             case "2":
-                genre = input("Enter movie genre: ")
-                response = requests.get(GENRE_URL)
-
+                find_by_genre()
             case "3":
                 find_by_popularity()
-
             case "4":
                 find_by_release()
-
             case "5":
                 not_exiting = False
-            
             case _:
                 continue
 
 # Prints out movies in a movie list one at a time
 def _display_movies(movie_list: list) -> None:
-    for x in range(len(movie_list)):
-        movie = movie_list[x]
+    for i in range(len(movie_list)):
+        movie = movie_list[i]
 
         print(movie["title"])
         if movie["overview"] == "":
@@ -56,7 +50,7 @@ def _display_movies(movie_list: list) -> None:
         print()
 
         # Lets user exit early
-        if x != len(movie_list) - 1:
+        if i != len(movie_list) - 1:
             end_str: str = input("Press enter to view next. Press X to exit ")
             if end_str.lower() == 'x':
                 break
@@ -69,6 +63,36 @@ def find_by_name():
     movie = input("Enter movie title: ")
     print()
     _display_movies(requests.get(TITLES_URL + f"?original_title={movie}").json())
+
+# Lets users search for movies by Genre
+def find_by_genre():
+    # Displays list of valid genres to user
+    print()
+    genre_list = genres.list()
+    genre_message: str = "Avalible Movie Genres: "
+    for i in range(len(genre_list)):
+        genre_message += genre_list[i]
+        if i != len(genre_list) - 1:
+            genre_message += ", "
+        else:
+            genre_message += "."
+    print(genre_message)
+    print()
+
+    # Gets genre list from user
+    user_input: str = input("Enter movie genre(s). If entering multiple genres, seperate with commas: ")
+    user_genres: list = [x.strip().lower() for x in user_input.split(',')]
+
+    # Converts user genre list into genre id list (invalid genres skiped)
+    user_genre_ids: list = [genres.get(x) for x in user_genres if genres.get(x) is not None]
+
+    # Displays results to user
+    if len(user_genre_ids) == 0:
+        print("No valid genres entered")
+        print()
+    else:
+        print()
+        _display_movies(requests.get(GENRE_URL, params={"genre" : user_genre_ids}).json())
 
 # Lets users find most popular movies
 def find_by_popularity():
