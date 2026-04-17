@@ -12,7 +12,7 @@ TMDB_URL: str = "https://api.themoviedb.org/3/search/movie"
 def search_by_title():
     movie_title = request.args.get('original_title')
     response = requests.get(TMDB_URL, params = {"api_key" : API_KEY, "query" : movie_title})
-    return response.json()
+    return response.json().get("results")
 
 
 @current_app.get('/review_by_title')
