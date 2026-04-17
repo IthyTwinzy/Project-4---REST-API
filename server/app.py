@@ -24,11 +24,10 @@ with app.app_context():
     import searchByGenre
     import searchByTitle
     import searchByRelease
-
     import searchByPopularity
+
 # Test function
 @app.route('/')
-#TEST
 def index():
     return {'message': 'hello flask'}
 

@@ -31,7 +31,7 @@ class Genres:
             return self._genres_to_id.get(key.lower().strip())
 
     # Checks if a specific is or genre is present in the dict
-    def isValue(self, key: int | str) -> bool: 
+    def hasValue(self, key: int | str) -> bool: 
         if isinstance(key, int):
             return key in self._id_to_genres        
         if isinstance(key, str):
@@ -40,7 +40,7 @@ class Genres:
 
     # Gets a list with the name of all genres
     def list(self) -> list:
-        return self._genres_to_id.keys()
+        return [str(k) for k in self._genres_to_id.keys()]
 
     _genres_to_id: dict = OrderedDict()
     _id_to_genres: dict = OrderedDict()
